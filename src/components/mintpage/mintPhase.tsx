@@ -150,7 +150,7 @@ const MintERC721 = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="hidden md:flex fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50 md:pb-5">
         <CustomConnectButton />
       </div>
       <div
@@ -160,8 +160,8 @@ const MintERC721 = () => {
         <Image
           src={background}
           alt="background"
-          layout="fill"
-          objectFit="cover"
+          fill={true}
+          style={{ objectFit: "cover" }}
         />
       </div>{" "}
       <div className="flex flex-col items-center justify-center w-full max-w-[1100px] p-4 z-50 mt-16">
@@ -245,7 +245,7 @@ const MintERC721 = () => {
                 )}
 
               {/* Claim Button */}
-              <div className="flex flex-row md:flex-col items-center gap-4">
+              <div className="flex flex-col md:flex-row items-center gap-4">
                 <div id="quantity-button" className="flex flex-row items-center justify-center">
                   <button
                     className="bg-white text-black px-4 py-2 rounded-md mr-4"
@@ -307,10 +307,6 @@ const MintERC721 = () => {
               startTimestamp={BigInt(publicPhase?.startTimestamp || 0)}
             />
           </div>
-        </div>
-
-        <div className="flex md:hidden my-10 z-50">
-          <CustomConnectButton />
         </div>
       </div>
     </div>
