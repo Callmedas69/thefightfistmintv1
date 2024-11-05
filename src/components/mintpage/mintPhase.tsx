@@ -163,147 +163,154 @@ const MintERC721 = () => {
           layout="fill"
           objectFit="cover"
         />
-      </div>
-      <Card className="text-white backdrop-blur-sm bg-black/60 w-full max-w-[1100px] p-4 z-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex w-auto h-auto items-center justify-center p-0">
-            {isContractMetadataLoading ? (
-              <span className="text-[12px] italic font-light text-slate-500">
-                Loading...
-              </span>
-            ) : (
-              <MediaRenderer
-                client={client}
-                src={contractMetadata?.image}
-                alt={contractMetadata?.name}
-                className="rounded-xl max-w-full h-auto"
-              />
-            )}
-          </div>
-          <div className="flex flex-col space-y-4">
-            <CardTitle className="text-2xl font-bold">
-              {contractMetadata?.name}
-            </CardTitle>
-            <CardDescription className="text-sm">
-              {contractMetadata?.description}
-            </CardDescription>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-5">
-                <div id="blockchain">
-                  <div className="text-slate-400 font-bold text-sm">
-                    BLOCKCHAIN
+      </div>{" "}
+      <div className="flex flex-col items-center justify-center w-full max-w-[1100px] p-4 z-50 mt-16">
+        <Card className="text-white backdrop-blur-sm bg-black/60 w-full p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex w-auto h-auto items-center justify-center p-0">
+              {isContractMetadataLoading ? (
+                <span className="text-[12px] italic font-light text-slate-500">
+                  Loading...
+                </span>
+              ) : (
+                <MediaRenderer
+                  client={client}
+                  src={contractMetadata?.image}
+                  alt={contractMetadata?.name}
+                  className="rounded-xl max-w-full h-auto"
+                />
+              )}
+            </div>
+            <div className="flex flex-col space-y-4">
+              <CardTitle className="text-2xl font-bold">
+                {contractMetadata?.name}
+              </CardTitle>
+              <CardDescription className="text-sm">
+                {contractMetadata?.description}
+              </CardDescription>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-5">
+                  <div id="blockchain">
+                    <div className="text-slate-400 font-bold text-sm">
+                      BLOCKCHAIN
+                    </div>
+                    <div>Base</div>
                   </div>
-                  <div>Base</div>
+                  <div id="price" className="flex flex-col">
+                    <div className="text-slate-400 font-bold text-sm">
+                      PRICE
+                    </div>
+                    <div>
+                      {price === "FREE MINT"
+                        ? "FREE MINT"
+                        : `${toEther(BigInt(price))} ETH`}
+                    </div>
+                  </div>
+                  <div id="supply">
+                    <div className="text-slate-400 font-bold text-sm">
+                      CLAIMED / TOTAL SUPPLY
+                    </div>
+                    <div className="font-semibold">
+                      {isClaimedSupplyLoading || isTotalSupplyLoading ? (
+                        <div className="text-[12px] italic font-light text-slate-500">
+                          calling the block
+                        </div>
+                      ) : (
+                        <div>
+                          {claimedSupply?.toString()} /{" "}
+                          {totalNFTSupply?.toString()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div id="price" className="flex flex-col">
-                  <div className="text-slate-400 font-bold text-sm">PRICE</div>
-                  <div>
-                    {price === "FREE MINT"
-                      ? "FREE MINT"
-                      : `${toEther(BigInt(price))} ETH`}
-                  </div>
-                </div>
-                <div id="supply">
-                  <div className="text-slate-400 font-bold text-sm">
-                    CLAIMED / TOTAL SUPPLY
-                  </div>
-                  <div className="font-semibold">
-                    {isClaimedSupplyLoading || isTotalSupplyLoading ? (
-                      <div className="text-[12px] italic font-light text-slate-500">
-                        calling the block
-                      </div>
+              </CardContent>
+
+              {/* Eligibility Message */}
+              {account?.address &&
+                allowlistPhaseActive &&
+                !publicPhaseActive && (
+                  <div className="text-center text-sm font-bold">
+                    {isAllowed ? (
+                      <span className="text-green-500">
+                        You are eligible to claim up to {maxEligibleQuantity}{" "}
+                        NFTs.
+                      </span>
                     ) : (
-                      <div>
-                        {claimedSupply?.toString()} /{" "}
-                        {totalNFTSupply?.toString()}
-                      </div>
+                      <span className="text-red-500">
+                        You are not eligible to claim this NFT.
+                      </span>
                     )}
                   </div>
-                </div>
-              </div>
-            </CardContent>
-
-            {/* Eligibility Message */}
-            {account?.address && allowlistPhaseActive && !publicPhaseActive && (
-              <div className="text-center text-sm font-bold">
-                {isAllowed ? (
-                  <span className="text-green-500">
-                    You are eligible to claim up to {maxEligibleQuantity} NFTs.
-                  </span>
-                ) : (
-                  <span className="text-red-500">
-                    You are not eligible to claim this NFT.
-                  </span>
                 )}
-              </div>
-            )}
 
-            {/* Claim Button */}
-            <div className="flex flex-row items-center gap-4">
-              <div className="flex flex-row items-center justify-center">
-                <button
-                  className="bg-white text-black px-4 py-2 rounded-md mr-4"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) =>
-                    handleQuantityChange(parseInt(e.target.value))
-                  }
-                  className="w-20 text-center border border-gray-300 rounded-md bg-black text-white py-2"
-                />
-                <button
-                  className="bg-white text-black px-4 py-2 rounded-md ml-4"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                >
-                  +
-                </button>
-              </div>
-              <div>
-                <TransactionButton
-                  transaction={() =>
-                    claimTo({
-                      contract: contract,
-                      to: account?.address || "",
-                      quantity: BigInt(quantity),
-                    })
-                  }
-                  onTransactionConfirmed={async () => {
-                    alert("NFT Claimed!");
-                    setQuantity(1);
-                  }}
-                >
-                  {`Claim NFT (${getPrice(quantity)} ETH)`}
-                </TransactionButton>
+              {/* Claim Button */}
+              <div className="flex flex-row items-center gap-4">
+                <div className="flex flex-row items-center justify-center">
+                  <button
+                    className="bg-white text-black px-4 py-2 rounded-md mr-4"
+                    onClick={() => handleQuantityChange(quantity - 1)}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) =>
+                      handleQuantityChange(parseInt(e.target.value))
+                    }
+                    className="w-20 text-center border border-gray-300 rounded-md bg-black text-white py-2"
+                  />
+                  <button
+                    className="bg-white text-black px-4 py-2 rounded-md ml-4"
+                    onClick={() => handleQuantityChange(quantity + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+                <div>
+                  <TransactionButton
+                    transaction={() =>
+                      claimTo({
+                        contract: contract,
+                        to: account?.address || "",
+                        quantity: BigInt(quantity),
+                      })
+                    }
+                    onTransactionConfirmed={async () => {
+                      alert("NFT Claimed!");
+                      setQuantity(1);
+                    }}
+                  >
+                    {`Claim NFT (${getPrice(quantity)} ETH)`}
+                  </TransactionButton>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Card>
-      <div className="relative text-white gap-20 z-50 flex flex-col md:flex-row items-center md:justify-between py-10 space-y-4 md:space-y-0">
-        <div className="flex flex-col items-center space-x-2 border border-white rounded-xl bg-black/60 px-10 py-5">
-          <span>FREE MINT:</span>
-          {publicPhaseActive ? (
-            <span>ENDED</span>
-          ) : (
+        </Card>
+        <div className="relative text-white gap-20 z-50 flex flex-col md:flex-row items-center md:justify-between py-10 space-y-4 md:space-y-0">
+          <div className="flex flex-col items-center space-x-2 border border-white rounded-xl bg-black/60 px-10 py-5">
+            <span>FREE MINT:</span>
+            {publicPhaseActive ? (
+              <span>ENDED</span>
+            ) : (
+              <CountdownTimer
+                startTimestamp={BigInt(allowlistPhase?.startTimestamp || 0)}
+              />
+            )}
+          </div>
+          <div className="flex flex-col items-center space-x-2 border border-white rounded-xl bg-black/60 px-10 py-5">
+            <span>PUBLIC MINT:</span>
             <CountdownTimer
-              startTimestamp={BigInt(allowlistPhase?.startTimestamp || 0)}
+              startTimestamp={BigInt(publicPhase?.startTimestamp || 0)}
             />
-          )}
+          </div>
         </div>
-        <div className="flex flex-col items-center space-x-2 border border-white rounded-xl bg-black/60 px-10 py-5">
-          <span>PUBLIC MINT:</span>
-          <CountdownTimer
-            startTimestamp={BigInt(publicPhase?.startTimestamp || 0)}
-          />
-        </div>
-      </div>
 
-      <div className="flex md:hidden my-10 z-50">
-        <CustomConnectButton />
+        <div className="flex md:hidden my-10 z-50">
+          <CustomConnectButton />
+        </div>
       </div>
     </div>
   );
