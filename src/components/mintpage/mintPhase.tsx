@@ -245,8 +245,8 @@ const MintERC721 = () => {
                 )}
 
               {/* Claim Button */}
-              <div className="flex flex-row items-center gap-4">
-                <div className="flex flex-row items-center justify-center">
+              <div className="flex flex-row md:flex-col items-center gap-4">
+                <div id="quantity-button" className="flex flex-row items-center justify-center">
                   <button
                     className="bg-white text-black px-4 py-2 rounded-md mr-4"
                     onClick={() => handleQuantityChange(quantity - 1)}
@@ -269,7 +269,7 @@ const MintERC721 = () => {
                     +
                   </button>
                 </div>
-                <div>
+                <div id="claim-nft-button" className="mt-4 md:mt-0">
                   <TransactionButton
                     transaction={() =>
                       claimTo({
