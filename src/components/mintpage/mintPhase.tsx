@@ -254,6 +254,7 @@ const MintERC721 = () => {
                     -
                   </button>
                   <input
+                    aria-label="quantity"
                     type="number"
                     value={quantity}
                     onChange={(e) =>
